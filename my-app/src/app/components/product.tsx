@@ -46,11 +46,15 @@ const Product = () => {
             key={index}
             className="rounded-lg shadow-sm hover:shadow-md p-4"
           >
-            <img
-              src= {product.image} 
-              alt={product.name}
-              className="rounded-lg mb-4 w-full h-64 object-cover" // Fixed height of 16rem (h-64)
-            />
+            <div className="relative w-full h-64">
+              <Image
+                src={product.image}
+                alt={product.name}
+                layout="fill" // Fills the container
+                objectFit="cover" // Ensures proper aspect ratio
+                className="rounded-lg"
+              />
+            </div>
             <h3 className="font-semibold text-lg text-gray-800 mb-2">
               {product.name}
             </h3>

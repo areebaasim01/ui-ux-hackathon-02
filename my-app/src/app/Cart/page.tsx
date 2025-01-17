@@ -50,14 +50,16 @@ const Cart = () => {
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex  sm:flex-row items-center justify-between border-b py-4"
+                className="flex sm:flex-row items-center justify-between border-b py-4"
               >
                 <div className="flex items-center mb-4 sm:mb-0">
                   {/* Product Image */}
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
-                    className="w-16 h-20 object-cover mr-4"
+                    width={64} // Width in pixels
+                    height={80} // Height in pixels
+                    className="object-cover mr-4 rounded-md"
                   />
                   <div>
                     <h2 className="font-semibold text-lg">{item.name}</h2>
@@ -71,7 +73,9 @@ const Cart = () => {
                     <Image
                       src="/dlt.png"
                       alt="delete"
-                      className="ml-0 sm:ml-[60px] mb-4 sm:mb-[30px] w-5 h-5 cursor-pointer"
+                      width={20} // Width in pixels
+                      height={20} // Height in pixels
+                      className="ml-0 sm:ml-[60px] mb-4 sm:mb-[30px] cursor-pointer"
                     />
                   </div>
                   <div className="flex items-center justify-between bg-gray-200 rounded-[100px]">
@@ -86,7 +90,7 @@ const Cart = () => {
 
           {/* Order Summary */}
           <div className="border-2 border-gray-200 p-4 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Summary</h2>
+            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
             <div className="flex justify-between py-2">
               <span className="text-gray-500">Subtotal</span>
               <span>${subtotal.toFixed(2)}</span>
@@ -119,7 +123,7 @@ const Cart = () => {
               <input
                 type="text"
                 placeholder="Add promo code"
-                className="flex-grow  px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
+                className="flex-grow px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
               />
               <button className="bg-black text-white px-6 py-2 text-sm font-medium rounded-[1000px] hover:bg-gray-800">
                 Apply
