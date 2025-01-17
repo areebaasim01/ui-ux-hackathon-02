@@ -86,7 +86,7 @@ const Cart = () => {
 
           {/* Order Summary */}
           <div className="border-2 border-gray-200 p-4 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+            <h2 className="text-xl font-bold mb-4">Summary</h2>
             <div className="flex justify-between py-2">
               <span className="text-gray-500">Subtotal</span>
               <span>${subtotal.toFixed(2)}</span>
