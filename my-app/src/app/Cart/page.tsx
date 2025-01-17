@@ -68,7 +68,7 @@ const Cart = () => {
                 </div>
                 <div>
                   <div>
-                    <img
+                    <Image
                       src="/dlt.png"
                       alt="delete"
                       className="ml-0 sm:ml-[60px] mb-4 sm:mb-[30px] w-5 h-5 cursor-pointer"

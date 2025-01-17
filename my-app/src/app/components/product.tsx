@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const Product = () => {
   const products = [
@@ -46,7 +47,7 @@ const Product = () => {
             className="rounded-lg shadow-sm hover:shadow-md p-4"
           >
             <img
-              src={product.image} 
+              src= {product.image} 
               alt={product.name}
               className="rounded-lg mb-4 w-full h-64 object-cover" // Fixed height of 16rem (h-64)
             />
