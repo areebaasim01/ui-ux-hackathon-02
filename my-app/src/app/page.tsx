@@ -5,6 +5,7 @@ import NewArrivals from "@/app/components/newArrivals/newArrivals";
 import Selling from "./components/selling/selling";
 import DressStyle from "./components/DressStyle/dress";
 import Reviews from "./components/reviews";
+import ProductCards from "./products/page";
 
 const Home = () => {
   return (
@@ -121,6 +122,7 @@ const Home = () => {
       <Selling />
       <DressStyle />
       <Reviews />
+      <ProductCards />
       <Footer />
     </div>
   );
