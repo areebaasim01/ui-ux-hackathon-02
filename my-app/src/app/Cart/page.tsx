@@ -1,144 +1,160 @@
-import React from 'react';
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/footer";
-import Image from "next/image";
+"use client";
+
+import React, { useEffect, useState } from 'react'
+import { getCartItems, removeFromCart, updateCartQuantity } from '../actions/actions'
+import { Product } from '../Types/products'
+import Navbar from '../components/Navbar';
+import Footer from '../components/footer';
+import Swal from "sweetalert2";
+import { urlFor } from '@/sanity/lib/image';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const Cart = () => {
-  const items = [
-    { 
-      id: 1, 
-      name: 'Gradient Graphic T-shirt', 
-      Size: 'Large',
-      color: 'White',
-      price: 145, 
-      quantity: 1, 
-      image: '/shirt2.png' // Image URL
-    },
-    { 
-      id: 2, 
-      name: 'Checkered Shirt', 
-      Size: 'Medium',
-      color: 'Red', 
-      price: 180, 
-      quantity: 1, 
-      image: '/arrival3.png' // Image URL
-    },
-    { 
-      id: 3, 
-      name: 'Skinny Fit Jeans', 
-      Size: 'Large',
-      color: 'Blue', 
-      price: 240, 
-      quantity: 1, 
-      image: '/image10.png' // Image URL
-    },
-  ];
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const discount = subtotal * 0.2; // 20% discount
-  const deliveryFee = 15;
-  const total = subtotal - discount + deliveryFee;
+    const [cartItems, setCartItems] = useState<Product[]>([])
 
-  return (
-    <div>
-      <Navbar />
-      <h1 className="text-xl text-[45px] mt-[30px] font-bold ml-4 md:ml-[150px]">YOUR CART</h1>
-      <div className="p-4 md:p-8 lg:p-12">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Cart Items */}
-          <div className="border-2 border-gray-200 p-4 rounded-lg">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="flex sm:flex-row items-center justify-between border-b py-4"
-              >
-                <div className="flex items-center mb-4 sm:mb-0">
-                  {/* Product Image */}
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    width={64} // Width in pixels
-                    height={80} // Height in pixels
-                    className="object-cover mr-4 rounded-md"
-                  />
-                  <div>
-                    <h2 className="font-semibold text-lg">{item.name}</h2>
-                    <p className="text-sm text-gray-500"><span className="text-black">Size:</span> {item.Size}</p>
-                    <p className="text-sm text-gray-500"><span className="text-black">Color:</span> {item.color}</p>
-                    <p className="font-bold mt-1">${item.price}</p>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    <Image
-                      src="/dlt.png"
-                      alt="delete"
-                      width={20} // Width in pixels
-                      height={20} // Height in pixels
-                      className="ml-0 sm:ml-[60px] mb-4 sm:mb-[30px] cursor-pointer"
-                    />
-                  </div>
-                  <div className="flex items-center justify-between bg-gray-200 rounded-[100px]">
-                    <button className="px-2 py-1 hover:bg-gray-300 text-[20px]">-</button>
-                    <span className="px-4">{item.quantity}</span>
-                    <button className="px-2 py-1 hover:bg-gray-300 text-[20px]">+</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+    useEffect(() => {
+        setCartItems(getCartItems())
+    }, []);
 
-          {/* Order Summary */}
-          <div className="border-2 border-gray-200 p-4 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-            <div className="flex justify-between py-2">
-              <span className="text-gray-500">Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="text-gray-500">Discount (20%)</span>
-              <span className="text-red-500">-${discount.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between py-2">
-              <span className="text-gray-500">Delivery Fee</span>
-              <span>${deliveryFee.toFixed(2)}</span>
-            </div>
-            <div className="flex justify-between font-bold text-lg py-2">
-              <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+    const handleRemove = (id: string) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You will not be able to recover this item!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, remove it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                removeFromCart(id);
+                setCartItems(getCartItems());
+                Swal.fire("Removed!", "Item has been removed.", "success");
+            }
+        })
+    }
+
+    const handleQuantityChange = (id: string, quantity: number) => {
+        updateCartQuantity(id, quantity);
+        setCartItems(getCartItems());
+    }
+
+    const handleIncrement = (id: string) => {
+        const product = cartItems.find((item) => item._id === id);
+        if (product)
+            handleQuantityChange(id, product.inventory + 1)
+    }
+
+    const handleDecrement = (id: string) => {
+        const product = cartItems.find((item) => item._id === id);
+        if (product && product.inventory > 1)
+            handleQuantityChange(id, product.inventory - 1)
+    }
+
+    const calculatedTotal = () => {
+        return cartItems.reduce((total, item) => total + item.price * item.inventory, 0)
+    }
+
+
+
+const router = useRouter();
+
+
+    const handleProceed = () => {
+        Swal.fire({
+            title: "Proceed to Checkout",
+            text: "Please review your cart before checkout",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Proceed!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire("Success", "Your Order has been successfully processed", "success");
+                router.push("/checkout")
+                setCartItems([])
+            }
+        })
+    }
+
+    return (
+        <div className="min-h-screen flex flex-col">
+          
+
+            <div className="flex-1 flex-row justify-between container mx-auto py-8 px-4 md:px-8">
+                <h1 className="text-3xl font-semibold text-start mb-8">Shopping Cart</h1>
+
+                {cartItems.length === 0 ? (
+                    <div className="text-center text-xl font-semibold">Your cart is empty</div>
+                ) : (
+                    <div className="overflow-x-auto shadow-xl border rounded-lg">
+                        <table className="w-full table-auto text-left">
+                            <thead className="bg-gray-100">
+                                <tr>
+                                    <th className="py-3 px-4 text-sm font-medium text-gray-600">Product</th>
+                                    <th className="py-3 px-4 text-sm font-medium text-gray-600">Price</th>
+                                    <th className="py-3 px-4 text-sm font-medium text-gray-600">Quantity</th>
+                                    <th className="py-3 px-4 text-sm font-medium text-gray-600">Total</th>
+                                    <th className="py-3 px-4 text-sm font-medium text-gray-600">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {cartItems.map(item => (
+                                    <tr key={item._id} className="border-b">
+                                        <td className="py-3 px-4">
+                                            <div className="flex items-center">
+                                                {item.image && (
+                                                  <Image 
+                                                  src={urlFor(item.image).url()}
+                                                  className="w-16 h-16 object-cover rounded-lg"
+                                                  alt="image"
+                                                  width={500}
+                                                  height={500}
+                                                  
+                                                  />
+                                                )}
+                                                <span className="text-sm ml-3 font-bold">{item.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-4 text-sm text-gray-600"> ${item.price ? item.price.toFixed(2) : "0.00"}</td>
+                                        <td className="py-3 px-4">
+                                            <div className="flex items-center space-x-2">
+                                                <button onClick={() => handleDecrement(item._id)} className="bg-gray-300 px-2 py-1 rounded-lg hover:bg-gray-400">
+                                                    -
+                                                </button>
+                                                <span className="text-sm font-medium">{item.inventory}</span>
+                                                <button onClick={() => handleIncrement(item._id)} className="bg-gray-300 px-2 py-1 rounded-lg hover:bg-gray-400">
+                                                    +
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-4 text-sm text-gray-600"> ${item.price && item.inventory ? (item.price * item.inventory).toFixed(2) : "0.00"} </td>
+                                        <td className="py-3 px-4">
+                                            <button onClick={() => handleRemove(item._id)} className="w-[70px] h-[30px]  rounded bg-red-600 text-center text-white hover:text-gray-300">
+                                                Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        <div className="flex justify-between items-center py-6 px-4 bg-gray-50 border-t">
+                            <div className="text-lg font-semibold">Total: ${calculatedTotal().toFixed(2)} </div>
+                            <button onClick={handleProceed} className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition duration-200">
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
-            {/* Promo Code Input */}
-            <div className="flex items-center border-2 rounded-[1000px] w-full mt-4">
-              {/* Image as an icon */}
-              <div className="px-3">
-                <Image
-                  src="/last.png"
-                  alt="promo"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                />
-              </div>
-              <input
-                type="text"
-                placeholder="Add promo code"
-                className="flex-grow px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
-              />
-              <button className="bg-black text-white px-6 py-2 text-sm font-medium rounded-[1000px] hover:bg-gray-800">
-                Apply
-              </button>
-            </div>
-
-            <button className="w-full bg-black text-white py-2 rounded-[100px] mt-4 hover:bg-gray-800">
-              Go to Checkout
-            </button>
-          </div>
+           
         </div>
-      </div>
-      <Footer />
-    </div>
-  );
-};
+    )
+}
 
 export default Cart;

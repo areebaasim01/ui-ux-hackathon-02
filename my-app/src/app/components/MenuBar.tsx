@@ -24,7 +24,7 @@ const Dropdown = () => {
        
        <div
           id="dropdown"
-          className=" z-10 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+          className="flex z-10 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
         >
           <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
             <li>
@@ -37,10 +37,10 @@ const Dropdown = () => {
             </li>
             <li>
               <a
-                href="/Casual"
+                href="/OnSale"
                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               >
-                Casual
+                On Sale
               </a>
             </li>
             <li>
@@ -60,15 +60,7 @@ const Dropdown = () => {
               </a>
             </li>
           </ul>
-          <div> 
-            <Image
-                            src="/SHOP.CO.png"
-                            alt="Shop.co Logo"
-                            width={120}
-                            height={22}
-                            className="sm:w-[160px] h-auto"
-                          />
-          </div>
+          
         </div>
 
        

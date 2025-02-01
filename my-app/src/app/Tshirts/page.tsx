@@ -1,21 +1,19 @@
 import Image from "next/image";
-import Footer from "../components/footer";
-import Navbar from "../components/Navbar";
 import Customer from "../components/customer";
-import Product from "../components/product";
+import Link from "next/link"
+import ProductA from "../components/product";
 
 const Tshirts = () => {
   return (
     <div>
-      {/* Navbar */}
-      <Navbar />
+     
 
       {/* Product Card Section */}
       <div className="max-w-5xl mx-auto bg-white rounded-lg overflow-hidden mt-6">
         <div className="flex flex-col md:flex-row justify-center items-center gap-10 px-2 md:px-0">
           {/* Small Images Section */}
           <div className="flex gap-3">
-            <div className="flex flex-col gap-10 md:gap-16">
+            <div className="flex flex-col  md:gap-16">
               <div className=" h-16  border rounded-md cursor-pointer">
                 <Image
                   src="/image2.png"
@@ -110,18 +108,19 @@ const Tshirts = () => {
 
             {/* Add to Cart Button */}
             <div className="mt-6">
-              <button className="w-full px-4 py-2 text-white bg-black rounded-md hover:bg-gray-800">
+             <Link href="Cart"> <button className="w-full px-4 py-2 text-white bg-black rounded-md hover:bg-gray-800">
                 Add to Cart
               </button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
       <Customer />
-      <Product />
+     
 
-      <Footer />
+     
     </div>
   );
 };

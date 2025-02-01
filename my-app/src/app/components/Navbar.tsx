@@ -1,10 +1,13 @@
 "use client";
 
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Dropdown from "./MenuBar";
 
 export default function Navbar() {
+
   return (
     <>
       <div className="bg-black py-2 text-white text-sx flex items-center gap-2 px-2 justify-center md:hidden ">
@@ -13,7 +16,20 @@ export default function Navbar() {
       </div>
       <div className="flex justify-between md:hidden p-5">
         <div>
-          <Dropdown />
+         <div className="flex gap-4 "> <Dropdown />
+          <div className="flex items-center">
+            <Link href="/">
+              <Image
+                src="/SHOP.CO.png"
+                alt="Shop.co Logo"
+                width={120}
+                height={26}
+                className="sm:hidden md:hidden lg:hidden"
+              />
+            </Link>
+          </div>
+          </div>
+          
         </div>
         <div className="flex items-center gap-4">
           <Image src="/searchicon.png" alt="Search" height={22} width={22} />
@@ -108,12 +124,7 @@ export default function Navbar() {
                 >
                   T-shirts
                 </Link>
-                <Link
-                  href="/Casual"
-                  className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
-                >
-                  Casual
-                </Link>
+                
                 <Link
                   href="#Accessories"
                   className="block px-4 py-2 text-sm text-black hover:bg-gray-100"
@@ -123,7 +134,7 @@ export default function Navbar() {
               </div>
             </div>
             <Link
-              href="/on-sale"
+              href="/OnSale"
               className="text-black text-sm hover:underline"
             >
               On Sale
@@ -134,9 +145,10 @@ export default function Navbar() {
             >
               New Arrivals
             </Link>
-            <Link href="/brands" className="text-black text-sm hover:underline">
+            <Link href="" className="text-black text-sm hover:underline">
               Brands
-            </Link>
+              </Link>
+             
           </div>
 
           {/* Search Bar */}
@@ -152,11 +164,15 @@ export default function Navbar() {
                 width={22}
               />
             </div>
+           
             <input
+              type="text"
               placeholder="Search for products..."
+             
               id="input"
               className=" bg-[#F0F0F0]  sm:w-[330px] h-[43px] rounded-r-full focus:outline-none "
             />
+           
           </div>
 
           {/* Right Section: Icons */}

@@ -1,103 +1,91 @@
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { Product } from "@/app/Types/products";
+import { client } from "@/sanity/lib/client";
+import { eightpro } from "@/sanity/lib/queries";
+import { urlFor } from "@/sanity/lib/image";
+import Link from "next/link";
+import { addToCart } from "@/app/actions/actions";
+import { icons } from "@sanity/icons";
+import Swal  from "sweetalert2"
 
-export default function Selling () {
+const Selling = () => {
+  const [products, setProduct] = useState<Product[]>([]);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const fetchedProduct: Product[] = await client.fetch(eightpro);
+      setProduct(fetchedProduct);
+    }
+    fetchProduct();
+  }, []);
+
+    const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+      e.preventDefault()
+      Swal.fire({
+        position : "top-right",
+        icon : "success",
+        title : `${product.name} Added to cart`,
+        showConfirmButton : false,
+        timer : 1000
+      })
+      addToCart(product)
+      
+    }
+
   return (
-    <div className="bg-white pt-[90px] py-10 px-4 md:px-8 lg:px-16 xl:px-32">
-      {/* Header */}
-      <h1 className="text-center font-integral text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 md:mb-12">
-      Top Selling
-      </h1>
-
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
-        {[
-          {
-            src: "/image7.png",
-            alt: "Vertical Striped Shirt",
-            title: "Vertical Striped Shirt",
-            rating: 5.0,
-            currentPrice: 212,
-            oldPrice: 232,
-            discount: 20,
-          },
-          {
-            src: "/image8.png",
-            alt: "Courage Graphic T-shirt",
-            title: "Courage Graphic T-shirt",
-            rating: 4.0,
-            currentPrice: 145,
-            oldPrice: null,
-            discount: null,
-          },
-          {
-            src: "/image9.png",
-            alt: "Loose Fit Bermuda Shorts",
-            title: "Loose Fit Bermuda Shorts",
-            rating: 3.0,
-            currentPrice: 80,
-            oldPrice: null,
-            discount: null,
-          },
-          {
-            src: "/image10.png",
-            alt: "Faded Skinny Jeans",
-            title: "Faded Skinny Jeans",
-            rating: 4.5,
-            currentPrice: 210,
-            oldPrice: null,
-            discount: null,
-            
-          },
-        ].map((product, index) => (
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-6 text-center mt-8">Top Selling</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => (
           <div
-            key={index}
-            className="flex flex-col items-center rounded-lg overflow-hidden "
+            key={product._id}
+            className="border rounded-lg shadow-md p-4 hover:shadow-lg transition duration-200"
           >
-            <div className="w-full aspect-square relative">
-              <Image
-                src={product.src}
-                alt={product.alt}
-                fill
-                style={{ objectFit: "cover" }}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+            <Link href={`/product/${product.slug.current}`}>
+              {/* Product Image */}
+              {product.image && (
+                <Image
+                  src={urlFor(product.image).url()}
+                  alt={product.name}
+                  width={200}
+                  height={200}
+                  className="w-full h-48 object-cover rounded-md"
+                />
+              )}
+              {/* Product Name */}
+              <h1 className="text-lg font-semibold mt-4">{product.name}</h1>
+            
+
+            {/* Price and Discount */}
+            <div className="flex gap-4 items-center">
+              <p className="text-lg font-semibold text-gray-500">
+                {product.price ? `$${product.price}` : "Price not available"}
+              </p>
+
+              {/* Discount Percentage */}
+              {product.discountPercent > 0 && (
+                <p className="px-2 py-1 text-sm font-medium bg-red-100 text-red-600 rounded-full border border-red-200">
+                  {`${product.discountPercent}% OFF`}
+                </p>
+              )}
             </div>
-            <div className="p-4 w-full flex flex-col items-start">
-              <h2 className="capitalize text-[15px] font-satoshi text-lg font-bold leading-tight mb-1 w-full truncate">
-                {product.title}
-              </h2>
-              <div className="flex items-center mb-2">
-                <Image src="/stars.png" alt="Rating Stars" width={80} height={15} />
-                <div className="flex items-center ml-2 text-sm text-gray-600">
-                  <span>{product.rating}</span>
-                  <span>/5</span>
+            <div className="pt-2">
+            <button className="bg-gradient-to-r from-blue-500 to-purple-500  text-white font-semibold py-2 w-full rounded-lg shadow-md hover:shadow-lg hover:scale-110 transition-transform duration-300 ease-in-out"
+            
+            onClick={(e) => handleAddToCart(e, product)}
+            >
+            
+                Add To Cart
+                </button>
                 </div>
-              </div>
-              <div className="flex items-center w-full justify-between">
-                {/* Combined Price Section - flex-wrap added here */}
-                <div className="flex flex-wrap items-center"> {/* Added items-center here */}
-                  <p className="text-xl font-bold text-black">${product.currentPrice}</p>
-                  {product.oldPrice && (
-                    <span className="flex items-center ml-2 text-gray-400 ">
-                      <p className="mr-2 line-through">${product.oldPrice}</p>
-                      <div className="bg-red-100 text-red-500 text-xs font-bold px-2 py-1 rounded-lg whitespace-nowrap"> {/* Added whitespace-nowrap */}
-                        -{product.discount}%
-                      </div>
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
+            </Link>
           </div>
         ))}
       </div>
-
-      {/* View All Button */}
-      <div className="mt-12 text-center">
-        <button className="bg-white border border-gray-300 rounded-full py-2 px-20 hover:bg-gray-100 transition duration-300">
-          View All
-        </button>
-      </div>
     </div>
   );
-}
+};
+
+export default Selling;

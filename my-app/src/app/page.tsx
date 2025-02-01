@@ -1,16 +1,21 @@
+
 import Image from "next/image";
-import Navbar from "./components/Navbar";
-import Footer from "./components/footer";
-import NewArrivals from "@/app/components/newArrivals/newArrivals";
+
 import Selling from "./components/selling/selling";
 import DressStyle from "./components/DressStyle/dress";
 import Reviews from "./components/reviews";
 import ProductCards from "./products/page";
+import Arrival from "./Arrival/page";
 
-const Home = () => {
+
+
+
+export default async function Home ()  {
+
+
   return (
     <div className="no-scroll">
-      <Navbar />
+   
 
       <section className="w-full h-auto bg-[#F2F0F1] flex flex-col md:flex-row justify-between font-sans flex-wrap">
         {/* Left Content */}
@@ -79,53 +84,55 @@ const Home = () => {
           />
         </div>
       </section>
+    
 
-      <div className="w-full h-full min-h-[146px] md:h-[122px] bg-black flex flex-wrap items-center justify-around py-4 px-2 sm:px-4 md:px-6 lg:px-8">
-        <Image
-          src={"/brand1.png"}
-          alt="Brand Logo 1"
-          width={166}
-          height={33}
-          className="m-2 sm:m-3 md:m-0"
-        />
-        <Image
-          src={"/brand2.png"}
-          alt="Brand Logo 2"
-          width={91}
-          height={38}
-          className="m-2 sm:m-3 md:m-0"
-        />
-        <Image
-          src={"/brand3.png"}
-          alt="Brand Logo 3"
-          width={156}
-          height={36}
-          className="m-2 sm:m-3 md:m-0"
-        />
-        <Image
-          src={"/brand4.png"}
-          alt="Brand Logo 4"
-          width={194}
-          height={32}
-          className="m-2 sm:m-3 md:m-0"
-        />
-        <Image
-          src={"/brand5.png"}
-          alt="Brand Logo 5"
-          width={206}
-          height={33}
-          className="m-2 sm:m-3 md:m-0"
-        />
-      </div>
 
-      <NewArrivals />
+    
+    <div  className="w-full h-full min-h-[146px] md:h-[122px] bg-black flex flex-wrap items-center justify-around py-4 px-2 sm:px-4 md:px-6 lg:px-8">
+            <Image
+              src={"/brand1.png"}
+              alt="Brand Logo 1"
+              width={166}
+              height={33}
+              className="m-2 sm:m-3 md:m-0"
+            />
+            <Image
+              src={"/brand2.png"}
+              alt="Brand Logo 2"
+              width={91}
+              height={38}
+              className="m-2 sm:m-3 md:m-0"
+            />
+            <Image
+              src={"/brand3.png"}
+              alt="Brand Logo 3"
+              width={156}
+              height={36}
+              className="m-2 sm:m-3 md:m-0"
+            />
+            <Image
+              src={"/brand4.png"}
+              alt="Brand Logo 4"
+              width={194}
+              height={32}
+              className="m-2 sm:m-3 md:m-0"
+            />
+            <Image
+              src={"/brand5.png"}
+              alt="Brand Logo 5"
+              width={206}
+              height={33}
+              className="m-2 sm:m-3 md:m-0"
+            />
+          </div>
+
+      <Arrival />
       <Selling />
       <DressStyle />
       <Reviews />
       <ProductCards />
-      <Footer />
+ 
     </div>
   );
 };
 
-export default Home;

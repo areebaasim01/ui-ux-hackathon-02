@@ -48,7 +48,7 @@ const Customer = () => {
   ];
 
   return (
-    <div className="p-6 mb-[10px]">
+    <div className="mx-5 mb-[10px]">
       {/* Tabs */}
       <div className="flex justify-center space-x-12 border-b border-gray-300 pb-4 mb-6">
         <button className="text-lg font-medium text-gray-700 hover:text-black">
@@ -63,7 +63,7 @@ const Customer = () => {
       </div>
 
       {/* Filters and Actions */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center gap-2 mb-6">
         <select className="border border-gray-300 ml-auto rounded-[1000px] px-3 py-2">
           <option value="latest">Latest</option>
           <option value="highest">Highest Rated</option>
