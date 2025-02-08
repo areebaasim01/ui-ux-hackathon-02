@@ -7,7 +7,6 @@ import { pro } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link";
 import { addToCart } from "@/app/actions/actions";
-import { icons } from "@sanity/icons";
 import Swal  from "sweetalert2"
 
 const ProductA = () => {

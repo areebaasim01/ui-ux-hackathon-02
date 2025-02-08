@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import sanityClient from "@sanity/client"; // Correct import for sanity client
 import Image from "next/image";
-import { apiVersion, dataset } from "@/sanity/env"; // Ensure these are properly defined
-import { product } from "@/sanity/schemaTypes/product"; // Assuming you have this type defined correctly
+
 
 const sanity = sanityClient({
   projectId: "b7ak1q7v",

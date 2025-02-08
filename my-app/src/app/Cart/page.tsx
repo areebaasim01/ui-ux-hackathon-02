@@ -3,8 +3,6 @@
 import React, { useEffect, useState } from 'react'
 import { getCartItems, removeFromCart, updateCartQuantity } from '../actions/actions'
 import { Product } from '../Types/products'
-import Navbar from '../components/Navbar';
-import Footer from '../components/footer';
 import Swal from "sweetalert2";
 import { urlFor } from '@/sanity/lib/image';
 import Image from 'next/image';

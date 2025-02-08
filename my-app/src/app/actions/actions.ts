@@ -1,6 +1,6 @@
-import { product } from "@/sanity/schemaTypes/product";
+
 import { Product } from "../Types/products";
-import exp from "constants";
+
 
 
 export const addToCart = (product : Product) => {

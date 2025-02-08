@@ -7,7 +7,6 @@ import { fourpro } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import Link from "next/link"; // Import Link
 import { addToCart } from "../actions/actions";
-import { icons } from "@sanity/icons";
 import Swal  from "sweetalert2"
 
 const Arrival = () => {

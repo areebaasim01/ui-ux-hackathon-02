@@ -6,9 +6,6 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import Customer from "@/app/components/customer";
 import ProductA from "@/app/components/product";
-import { addToCart } from "@/app/actions/actions";
-import { icons } from "@sanity/icons";
-import Swal  from "sweetalert2"
 
 
 interface ProductPageProps {
