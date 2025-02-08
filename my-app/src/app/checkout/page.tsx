@@ -1,5 +1,6 @@
 "use client";
 
+import { client } from "@/sanity/lib/client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { getCartItems } from "@/app/actions/actions";
@@ -7,6 +8,7 @@ import Link from "next/link";
 import { Product } from "@/app/Types/products";
 import { urlFor } from "@/sanity/lib/image";
 import { CgChevronRight } from "react-icons/cg";
+import Swal from "sweetalert2";
 
 
 export default function CheckoutPage() {
@@ -67,13 +69,62 @@ export default function CheckoutPage() {
     return Object.values(errors).every((error) => !error);
   };
 
-  const handlePlaceOrder = () => {
-    if (validateForm()) {
-      localStorage.removeItem("appliedDiscount");
-    //   toast.success("Order placed successfully!");
-    } else {
-    //   toast.error("Please fill in all the fields.");
+  const handlePlaceOrder = async () => {
+    
+    Swal.fire({
+      title : "Processing your order...",
+      text : "please wait a moment",
+      icon : "info",
+      showCancelButton : true,
+      confirmButtonColor : "#3085d6",
+      cancelButtonColor : "#d33",
+      confirmButtonText : "Proceed",
+
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (validateForm()) {
+          localStorage.removeItem("appliedDiscount");
+          Swal.fire(
+            "Success!",
+            "Your order has been succesfully processed!",
+            "success"
+          );
+        } else {
+          Swal.fire (
+            "Error!",
+            "Please fill in all the fields before proceeding.",
+            "error"
+          );
+        }
+      }
+    });
+
+
+    const orderData = {
+      _type : 'order',
+      firstName : formValues.firstName,
+     lastName : formValues.lastName,
+    address : formValues.address,
+      city : formValues.city,
+      zipCode : formValues.zipCode,
+      phone : formValues.phone,
+      email : formValues.email,
+      cartItems : cartItems.map(item => ({
+        _type : 'reference',
+        _ref : item._id,
+      })),
+      total : total,
+      discount : discount,
+      orderDate : new Date().toISOString
+    };
+
+    try {
+      await client.create(orderData )
+      localStorage.removeItem("appliedDiscount")
+    } catch (error) {
+      console.error("error creating order", error)
     }
+
   };
 
   return (
@@ -155,7 +206,7 @@ export default function CheckoutPage() {
                   placeholder="Enter your first name"
                   value={formValues.firstName}
                   onChange={handleInputChange}
-                  className="border"
+                  className="border py-1 text-center"
                 />
                 {formErrors.firstName && (
                   <p className="text-sm text-red-500">
@@ -170,7 +221,7 @@ export default function CheckoutPage() {
                   placeholder="Enter your last name"
                   value={formValues.lastName}
                   onChange={handleInputChange}
-                    className="border"
+                    className="border py-1 text-center"
                 />
                 {formErrors.lastName && (
                   <p className="text-sm text-red-500">
@@ -186,7 +237,7 @@ export default function CheckoutPage() {
                 placeholder="Enter your address"
                 value={formValues.address}
                 onChange={handleInputChange}
-                  className="border"
+                  className="w-full border rounded-lg py-1 text-center"
               />
               {formErrors.address && (
                 <p className="text-sm text-red-500">*</p>
@@ -199,7 +250,7 @@ export default function CheckoutPage() {
                 placeholder="Enter your city"
                 value={formValues.city}
                 onChange={handleInputChange}
-                  className="border"
+                  className="w-full border rounded-lg  py-1 text-center"
               />
               {formErrors.city && (
                 <p className="text-sm text-red-500">*</p>
@@ -212,7 +263,7 @@ export default function CheckoutPage() {
                 placeholder="Enter your zip code"
                 value={formValues.zipCode}
                 onChange={handleInputChange}
-                  className="border"
+                  className="border py-1 text-center"
               />
               {formErrors.zipCode && (
                 <p className="text-sm text-red-500">*</p>
@@ -225,7 +276,7 @@ export default function CheckoutPage() {
                 placeholder="Enter your phone number"
                 value={formValues.phone}
                 onChange={handleInputChange}
-                  className="border"
+                  className="border py-1 text-center"
               />
               {formErrors.phone && (
                 <p className="text-sm text-red-500">*</p>
@@ -235,10 +286,10 @@ export default function CheckoutPage() {
               <label htmlFor="email">Email </label>
               <input
                 id="email"
-                placeholder="Enter your email address"
+                placeholder="Enter your email "
                 value={formValues.email}
                 onChange={handleInputChange}
-                  className="border"
+                  className="border rounded-sm py-1 text-center"
               />
               {formErrors.email && (
                 <p className="text-sm text-red-500">*</p>

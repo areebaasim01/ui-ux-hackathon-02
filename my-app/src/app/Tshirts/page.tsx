@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Customer from "../components/customer";
 import Link from "next/link"
-import ProductA from "../components/product";
+
 
 const Tshirts = () => {
   return (

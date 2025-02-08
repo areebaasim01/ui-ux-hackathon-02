@@ -26,7 +26,8 @@ async function getProduct(slug: string): Promise<Product> {
       discountPercent,
       description,
       colors,
-      sizes
+      sizes,
+      category
     }`,
     { slug }
   );
